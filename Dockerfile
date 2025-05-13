@@ -67,8 +67,9 @@ COPY ./log ./log
 COPY ./lib ./lib
 COPY ./public ./public
 COPY ./tmp ./tmp
-COPY LICENSE README.md Rakefile config.ru .version ./
-COPY .version ./public/version
+COPY LICENSE README.md Rakefile config.ru ./
+RUN touch .version && echo "1.0.0" > .version
+COPY .version ./public/version || touch ./public/version && echo "1.0.0" > ./public/version
 
 COPY --from=fonts /fonts/GoNotoKurrent-Regular.ttf /fonts/GoNotoKurrent-Bold.ttf /fonts/DancingScript-Regular.otf /fonts/OFL.txt /fonts
 COPY --from=fonts /fonts/FreeSans.ttf /usr/share/fonts/freefont
