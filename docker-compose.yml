@@ -1,24 +1,39 @@
-version: '3'
 services:
   app:
-    image: scriblli/scriblli:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./scriblli:/data/scriblli
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/scriblli
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    image: docuseal/docuseal:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./docuseal:/data/docuseal
+    environment:
+      - FORCE_SSL=${HOST}
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
 
   postgres:
-    image: postgres:14
+    image: postgres:15
+    volumes:
+      - './pg_data:/var/lib/postgresql/data'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: scriblli
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_DB: docuseal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-volumes:
-  postgres_data:
+  caddy:
+    image: caddy:latest
+    command: caddy reverse-proxy --from $HOST --to app:3000
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - .:/data
+    environment:
+      - HOST=${HOST}

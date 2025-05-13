@@ -2,7 +2,71 @@
   <%= render 'shared/settings_nav' %>
   <div class="flex-grow max-w-xl mx-auto">
     <h1 class="text-4xl font-bold mb-4">SMS</h1>
-    <%= render 'placeholder' %>
+    
+    <%= form_for @encrypted_config, url: encrypted_configs_path, method: :post do |f| %>
+      <%= f.hidden_field :key, value: 'sms_configs' %>
+      <% sms_configs = @encrypted_config.value.presence || {} %>
+      
+      <div class="card card-compact bg-base-100 mb-5">
+        <div class="card-body">
+          <h2 class="card-title text-xl font-bold"><%= t('twilio_sms') %></h2>
+          <div class="form-control w-full mb-2">
+            <label class="label">
+              <span class="label-text"><%= t('account_sid') %></span>
+            </label>
+            <%= text_field_tag 'encrypted_config[value][twilio][account_sid]', 
+                                sms_configs.dig('twilio', 'account_sid'), 
+                                class: 'base-input' %>
+          </div>
+          
+          <div class="form-control w-full mb-2">
+            <label class="label">
+              <span class="label-text"><%= t('auth_token') %></span>
+            </label>
+            <%= password_field_tag 'encrypted_config[value][twilio][auth_token]', 
+                                   sms_configs.dig('twilio', 'auth_token'), 
+                                   class: 'base-input' %>
+          </div>
+          
+          <div class="form-control w-full mb-2">
+            <label class="label">
+              <span class="label-text"><%= t('from_number') %></span>
+            </label>
+            <%= text_field_tag 'encrypted_config[value][twilio][from_number]', 
+                               sms_configs.dig('twilio', 'from_number'), 
+                               class: 'base-input',
+                               placeholder: '+15551234567' %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card card-compact bg-base-100 mb-5">
+        <div class="card-body">
+          <h2 class="card-title text-xl font-bold"><%= t('custom_provider') %></h2>
+          <div class="form-control w-full mb-2">
+            <label class="label">
+              <span class="label-text"><%= t('api_endpoint') %></span>
+            </label>
+            <%= text_field_tag 'encrypted_config[value][custom][api_endpoint]', 
+                                sms_configs.dig('custom', 'api_endpoint'), 
+                                class: 'base-input' %>
+          </div>
+          
+          <div class="form-control w-full mb-2">
+            <label class="label">
+              <span class="label-text"><%= t('api_key') %></span>
+            </label>
+            <%= password_field_tag 'encrypted_config[value][custom][api_key]', 
+                                   sms_configs.dig('custom', 'api_key'), 
+                                   class: 'base-input' %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end mt-4">
+        <%= f.submit t('save'), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
   </div>
   <div class="w-0 md:w-52"></div>
 </div>

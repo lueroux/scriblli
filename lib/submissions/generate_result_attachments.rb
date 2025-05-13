@@ -27,7 +27,7 @@ module Submissions
       bold_italic: FONT_BOLD_ITALIC_NAME
     }.freeze
 
-    SIGN_REASON = 'Signed by %<name>s with DocuSeal.com'
+    SIGN_REASON = 'Signed by %<n>s with Scriblli.com'
 
     RTL_REGEXP = TextUtils::RTL_REGEXP
 
@@ -126,7 +126,7 @@ module Submissions
       with_signature_id = configs.find { |c| c.key == AccountConfig::WITH_SIGNATURE_ID }&.value == true
       is_flatten = configs.find { |c| c.key == AccountConfig::FLATTEN_RESULT_PDF_KEY }&.value != false
 
-      pdfs_index = build_pdfs_index(submitter.submission, submitter:, flatten: is_flatten)
+      pdfs_index = build_pdfs_index(submitter.submission, submitter: nil, flatten: is_flatten)
 
       if with_signature_id || submitter.account.testing?
         pdfs_index.each_value do |pdf|
@@ -209,7 +209,7 @@ module Submissions
           font_size   = preferences_font_size
           font_size ||= (([page.box.width, page.box.height].min / A4_SIZE[0].to_f) * FONT_SIZE).to_i
 
-          fill_color = field.dig('preferences', 'color').presence
+          fill_color = field.dig('preferences', 'color').to_s.delete_prefix('#').presence
 
           font_name = field.dig('preferences', 'font')
           font_variant = (field.dig('preferences', 'font_type').presence || 'none').to_sym

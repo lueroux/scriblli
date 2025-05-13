@@ -5,16 +5,16 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        scriblli: {
+        docuseal: {
           'color-scheme': 'light',
-          primary: '#E0E4E5',
-          secondary: '#37AABB',
-          accent: '#ACFC04',
-          neutral: '#54396C',
+          primary: '#e4e0e1',
+          secondary: '#ef9fbc',
+          accent: '#eeaf3a',
+          neutral: '#291334',
           'base-100': '#faf7f5',
           'base-200': '#efeae6',
           'base-300': '#e7e2df',
-          'base-content': '#54396C',
+          'base-content': '#291334',
           '--rounded-btn': '1.9rem',
           '--tab-border': '2px',
           '--tab-radius': '.5rem'

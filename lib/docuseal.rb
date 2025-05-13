@@ -8,7 +8,7 @@ module Docuseal
   ENQUIRIES_URL = "#{PRODUCT_URL}/enquiries".freeze
   PRODUCT_NAME = 'Scriblli'
   DEFAULT_APP_URL = ENV.fetch('APP_URL', 'http://localhost:3000')
-  GITHUB_URL = 'https://github.com/lueroux/scriblli'
+  GITHUB_URL = 'https://github.com/docusealco/docuseal'
   DISCORD_URL = 'https://discord.gg/qygYCDGck9'
   TWITTER_URL = 'https://twitter.com/scriblli'
   TWITTER_HANDLE = '@scriblli'
@@ -52,7 +52,11 @@ module Docuseal
   end
 
   def multitenant?
-    ENV['MULTITENANT'] == 'true'
+    true
+  end
+
+  def advanced_formats?
+    true
   end
 
   def demo?

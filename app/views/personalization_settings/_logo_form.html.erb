@@ -1,1 +1,44 @@
-<%= render 'logo_placeholder' %>
+<div class="card card-compact bg-base-100">
+  <div class="card-body">
+    <%= form_for @account_config, url: account_configs_path, method: :post, html: { class: 'space-y-4' } do |f| %>
+      <%= f.hidden_field :key, value: 'company_logo' %>
+      
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text"><%= t('company_name') %></span>
+        </label>
+        <%= text_field_tag 'account_config[value][company_name]', @account_config.value.try(:[], 'company_name'), class: 'base-input' %>
+      </div>
+      
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text"><%= t('logo') %></span>
+        </label>
+        <% if @account_config.value.try(:[], 'logo_url').present? %>
+          <div class="mb-2">
+            <img src="<%= @account_config.value['logo_url'] %>" alt="Company Logo" class="max-h-20">
+          </div>
+        <% end %>
+        <input type="file" name="account_config[logo]" accept="image/png,image/jpeg,image/gif,image/svg+xml" class="file-input file-input-bordered w-full">
+      </div>
+      
+      <div class="form-control w-full">
+        <label class="label flex items-center space-x-2">
+          <%= check_box_tag 'account_config[value][show_on_login]', '1', @account_config.value.try(:[], 'show_on_login'), class: 'base-checkbox' %>
+          <span class="label-text"><%= t('show_on_login_page') %></span>
+        </label>
+      </div>
+      
+      <div class="form-control w-full">
+        <label class="label flex items-center space-x-2">
+          <%= check_box_tag 'account_config[value][show_on_form]', '1', @account_config.value.try(:[], 'show_on_form'), class: 'base-checkbox' %>
+          <span class="label-text"><%= t('show_on_submission_form') %></span>
+        </label>
+      </div>
+      
+      <div class="flex justify-end mt-4">
+        <%= f.submit t('save'), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>

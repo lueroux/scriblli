@@ -1,1 +1,46 @@
-<%= render 'submissions/bulk_send_placeholder' %>
+<div class="card card-compact bg-base-100">
+  <div class="card-body">
+    <h2 class="card-title"><%= t('bulk_send_from_spreadsheet') %></h2>
+    
+    <%= form_with url: template_submissions_path(@template), method: :post, class: 'mt-4', data: { turbo: false } do |f| %>
+      <input type="hidden" name="source" value="bulk_import">
+      
+      <div class="alert mb-4">
+        <%= svg_icon('info_circle', class: 'w-6 h-6') %>
+        <div>
+          <p class="font-bold"><%= t('upload_csv_or_xlsx_file') %></p>
+          <p><%= t('first_row_should_contain_headers') %></p>
+        </div>
+      </div>
+      
+      <div class="form-control w-full mb-4">
+        <div class="flex justify-between">
+          <label class="label">
+            <span class="label-text"><%= t('spreadsheet') %></span>
+          </label>
+        </div>
+        <input type="file" name="file" accept=".csv,.xlsx" required class="file-input file-input-bordered w-full">
+      </div>
+      
+      <% if @template.submitters.size > 1 %>
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text"><%= t('email_column_for_each_party') %></span>
+          </label>
+          
+          <% @template.submitters.each do |submitter| %>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="font-medium"><%= submitter['name'] %>:</span>
+              <input type="text" name="email_columns[<%= submitter['uuid'] %>]" 
+                     class="base-input" placeholder="email">
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <div class="flex justify-end mt-4">
+        <%= f.submit t('preview'), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>

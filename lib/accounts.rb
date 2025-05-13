@@ -147,10 +147,7 @@ module Accounts
   end
 
   def can_send_emails?(_account, **_params)
-    return true if Docuseal.multitenant?
-    return true if ENV['SMTP_ADDRESS'].present?
-
-    EncryptedConfig.exists?(key: EncryptedConfig::EMAIL_SMTP_KEY)
+    true
   end
 
   def can_send_invitation_emails?(_account)

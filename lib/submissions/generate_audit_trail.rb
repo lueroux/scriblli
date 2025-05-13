@@ -379,7 +379,9 @@ module Submissions
 
       composer.text(I18n.t('event_log'), font_size: 12, padding: [10, 0, 20, 0])
 
-      events_data = submission.submission_events.sort_by(&:event_timestamp).map do |event|
+      events_data = submission.submission_events.sort_by(&:event_timestamp).filter_map do |event|
+        next if event.event_type.in?(%w[bounce_email complaint_email])
+
         submitter = submission.submitters.find { |e| e.id == event.submitter_id }
         submitter_name =
           if event.event_type.include?('sms') || event.event_type.include?('phone')
@@ -421,7 +423,7 @@ module Submissions
     end
 
     def sign_reason
-      'Signed with DocuSeal.com'
+      'Signed with Scriblli.com'
     end
 
     def maybe_add_background(_canvas, _submission, _page_size); end
@@ -433,7 +435,7 @@ module Submissions
     def add_logo(column, _submission = nil)
       column.image(PdfIcons.logo_io, width: 40, height: 40, position: :float)
 
-      column.formatted_text([{ text: 'DocuSeal',
+      column.formatted_text([{ text: 'Scriblli',
                                link: Docuseal::PRODUCT_EMAIL_URL }],
                             font_size: 20,
                             font: [FONT_NAME, { variant: :bold }],

@@ -4,13 +4,11 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    can :manage, Template, account_id: user.account_id
-
-    can %i[read update create], Template,
-        Abilities::TemplateConditions.collection(user) do |template|
+    can %i[read create update], Template, Abilities::TemplateConditions.collection(user) do |template|
       Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
     end
 
+    can :destroy, Template, account_id: user.account_id
     can :manage, TemplateFolder, account_id: user.account_id
     can :manage, TemplateSharing, template: { account_id: user.account_id }
     can :manage, Submission, account_id: user.account_id
@@ -23,5 +21,12 @@ class Ability
     can :manage, Account, id: user.account_id
     can :manage, AccessToken, user_id: user.id
     can :manage, WebhookUrl, account_id: user.account_id
+    
+    # Grant access to all Pro features
+    can :manage, :bulk_send
+    can :manage, :personalization_advanced
+    can :manage, :saml_sso
+    can :manage, :reply_to
+    can :manage, :tenants
   end
 end

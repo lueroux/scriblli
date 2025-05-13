@@ -1,11 +1,11 @@
 self.addEventListener('install', () => {
-  console.log('DocuSeal App installed')
+  console.log('Scriblli App installed')
 })
 
 self.addEventListener('activate', () => {
-  console.log('DocuSeal App activated')
+  console.log('Scriblli App activated')
 })
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(fetch(event.request))
+  // Empty fetch handler to trigger service worker activation
 })
